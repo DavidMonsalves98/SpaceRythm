@@ -228,7 +228,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -62}
   m_SizeDelta: {x: 800, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &235720047
@@ -343,6 +343,7 @@ GameObject:
   - component: {fileID: 242286434}
   - component: {fileID: 242286436}
   - component: {fileID: 242286437}
+  - component: {fileID: 242286438}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -485,7 +486,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 242286433}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 298b813aa6e7b5741b3d3755491b7295, type: 3}
   m_Name: 
@@ -494,6 +495,28 @@ MonoBehaviour:
   textState: {fileID: 235720047}
   spaceship: {fileID: 1868016492}
   objectiveTime: 3
+  tolerance: 0.15
+  damage: 35
+--- !u!114 &242286438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242286433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd67a38f574006043b46579e8e648b36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PruebaSecuenciaRitmica
+  music: {fileID: 242286434}
+  textState: {fileID: 235720047}
+  spaceship: {fileID: 1868016492}
+  goalsTime:
+  - 3
+  - 7
+  - 12
+  - 16
   tolerance: 0.15
   damage: 35
 --- !u!1 &319464699
