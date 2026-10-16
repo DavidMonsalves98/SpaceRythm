@@ -25,6 +25,39 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
     private bool IsTestCompleted => currentGoalIndex >= goalsTime.Length || spaceship.IsDestroyed;
     private double testDuration = 0;
 
+    public double ElapsedTime
+    {
+        get { return AudioSettings.dspTime - startMusic; }
+    }
+
+    public double Tolerance
+    {
+        get { return tolerance; }
+    }
+
+    public bool ActionPending
+    {
+        get 
+        {
+            return startSolicited && spaceship != null && !spaceship.IsDestroyed &&
+                currentGoalIndex < goalsTime.Length && ElapsedTime >= 0;
+        }
+    }
+
+    public double CurrentGoalTime
+    {
+        get 
+        { 
+            if (!ActionPending)
+            {
+                return 0;
+            }
+            return goalsTime[currentGoalIndex];
+        }
+    }
+
+    public event System.Action<bool> ActionSolved;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -77,15 +110,6 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
             Debug.LogError("No keyboard detected. Please ensure a keyboard is connected.", this);
             return;
         }
-        if (keyboard.rKey.wasPressedThisFrame)
-        {
-            StartTest();
-
-        }
-        else if (keyboard.spaceKey.wasPressedThisFrame && !startSolicited)
-        {
-            StartTest();
-        }
 
         if (!startSolicited)
         {
@@ -127,7 +151,7 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
 
     }
 
-    private void StartTest()
+    public void StartTest()
     {
         music.Stop();
 
@@ -185,6 +209,8 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
         {
             music.Stop();
         }
+
+        ActionSolved?.Invoke(isHit);
     }
 
     private void ShowState(double elapsedTime)
