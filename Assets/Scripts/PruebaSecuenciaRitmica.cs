@@ -58,6 +58,16 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
 
     public event System.Action<bool> ActionSolved;
 
+    public event System.Action GameFinished;
+
+    private bool results = false;
+
+    public int Hits => successfulHits;
+    public int TotalActions => goalsTime.Length;
+    public int LifeRemaining => spaceship.CurrentLife;
+    public bool IsDestroyed => spaceship.IsDestroyed;
+    public double Duration => testDuration;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -139,11 +149,14 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
         }
         if (IsTestCompleted)
         {
-            if (testDuration == 0)
+            if (!results)
             {
                 testDuration = elapsedTime;
+                music.Stop();
+                results = true;
+                GameFinished?.Invoke();
             }
-            music.Stop();
+
             ShowState(testDuration);
             return;
         }
@@ -159,6 +172,7 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
         successfulHits = 0;
         lastResult = "Pending";
         testDuration = 0;
+        results = false;
 
         spaceship.RestoreLife();
 
@@ -237,6 +251,6 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
         $"Time: {elapsedTime:F2} s\n" +
         $"Hits: {successfulHits}\n" +
         $"{lastResult}\n" +
-        "F: action | R: Restart";
+        "F: action";
     }
 }
