@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
@@ -11,19 +12,20 @@ public class GameController : MonoBehaviour
     [SerializeField] private TMP_Text textResults;
 
 
+    [SerializeField] private Button playButton;
+    [SerializeField] private Button restartButton;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (evaluator == null || menu == null || hud == null || results == null || textResults == null)
+        if (evaluator == null || menu == null || hud == null || results == null || textResults == null || playButton == null || restartButton == null)
         {
             Debug.LogError("One or more required components are missing", this);
             enabled = false;
             return;
         }
         evaluator.GameFinished += ShowResults;
-        menu.SetActive(true);
-        hud.SetActive(false);
-        results.SetActive(false);
+        ShowMenu();
     }
 
     public void Play()
@@ -49,12 +51,20 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void ReturnMenu()
+    private void ShowMenu()
     {
         Deselect();
-        hud.SetActive(false);
+
         menu.SetActive(true);
+        hud.SetActive(false);
         results.SetActive(false);
+
+        SelectButton(playButton);
+    }
+
+    public void ReturnMenu()
+    {
+        ShowMenu();
     }
 
     void ShowResults()
@@ -82,6 +92,8 @@ public class GameController : MonoBehaviour
         menu.SetActive(false);
         results.SetActive(true);
 
+        SelectButton(restartButton);
+
     }
 
     private void OnDestroy()
@@ -90,6 +102,15 @@ public class GameController : MonoBehaviour
         {
             evaluator.GameFinished -= ShowResults;
         }
+    }
+
+    private void SelectButton(Button button)
+    {
+        if (button == null || EventSystem.current == null || !button.gameObject.activeInHierarchy || !button.interactable )
+        {
+            return;
+        }
+        EventSystem.current.SetSelectedGameObject(button.gameObject);
     }
 
 }

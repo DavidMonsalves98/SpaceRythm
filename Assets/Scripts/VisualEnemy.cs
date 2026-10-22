@@ -53,16 +53,7 @@ public class VisualEnemy : MonoBehaviour
     
     private void SolveActionEnemy(bool isHit)
     {
-        if (isHit)
-        {
-            Debug.Log("is Hit!: Enemy destroyed.");
-        }
-        else
-        {
-            Debug.Log("Missed: Enemy in retreat");
-        }
         RetreatEnemy();
-
     }
 
     private void RetreatEnemy()

@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class PruebaSecuenciaRitmica : MonoBehaviour
 {
 
-    [SerializeField] private AudioSource music;
+    [SerializeField] private MusicClock musicClock;
     [SerializeField] private TMP_Text textState;
     [SerializeField] private VidaNave spaceship;
 
@@ -14,7 +14,6 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
     [SerializeField] private double tolerance = 0.15;
     [SerializeField] private int damage = 35;
 
-    private double startMusic;
     private bool startSolicited = false;
 
     private int currentGoalIndex = 0;
@@ -24,10 +23,11 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
 
     private bool IsTestCompleted => currentGoalIndex >= goalsTime.Length || spaceship.IsDestroyed;
     private double testDuration = 0;
+    private bool results = false;
 
     public double ElapsedTime
     {
-        get { return AudioSettings.dspTime - startMusic; }
+        get { return musicClock.ElapsedTime; }
     }
 
     public double Tolerance
@@ -39,8 +39,11 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
     {
         get 
         {
-            return startSolicited && spaceship != null && !spaceship.IsDestroyed &&
-                currentGoalIndex < goalsTime.Length && ElapsedTime >= 0;
+            return startSolicited 
+                && spaceship != null 
+                && !spaceship.IsDestroyed 
+                && currentGoalIndex < goalsTime.Length 
+                && ElapsedTime >= 0;
         }
     }
 
@@ -57,10 +60,7 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
     }
 
     public event System.Action<bool> ActionSolved;
-
     public event System.Action GameFinished;
-
-    private bool results = false;
 
     public int Hits => successfulHits;
     public int TotalActions => goalsTime.Length;
@@ -72,19 +72,22 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (music == null || textState == null || spaceship == null)
+        if (musicClock == null || textState == null || spaceship == null)
         {
             Debug.LogError("One or more required components are missing.", this);
             enabled = false;
             return;
         }
-        if (music.clip == null)
+        if (!musicClock.IsConfigured)
         {
-            Debug.LogError("Music AudioSource does not have an assigned AudioClip.", this);
+            Debug.LogError("MusicClock requires an AudioSource with an AudioClip.", this);
             enabled = false;
             return;
         }
-        if (goalsTime == null || goalsTime.Length == 0 || tolerance <= 0 || damage <= 0)
+        if (goalsTime == null || 
+            goalsTime.Length == 0 || 
+            tolerance <= 0 || 
+            damage <= 0)
         {
             Debug.LogError("GoalsTime array must not be null or empty, tolerance and damage must be greater than 0.", this);
             enabled = false;
@@ -93,7 +96,7 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
 
         for (int i = 0; i < goalsTime.Length; i++)
         {
-            if (goalsTime[i] < 0 || goalsTime[i] + tolerance >= music.clip.length)
+            if (goalsTime[i] < 0 || goalsTime[i] + tolerance >= musicClock.ClipDuration)
             {
                 Debug.LogError($"Goal time at index {i} is invalid. It must be non-negative and less than the length of the music clip minus tolerance.", this);
                 enabled = false;
@@ -107,7 +110,7 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
             }
         }
 
-        textState.text = "Press Space to Start Music";
+        textState.text = "Press Play to Start";
 
     }
 
@@ -126,7 +129,7 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
             return;
         }
 
-        double elapsedTime = AudioSettings.dspTime - startMusic;
+        double elapsedTime = musicClock.ElapsedTime;
 
         if (elapsedTime < 0)
         {
@@ -151,8 +154,9 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
         {
             if (!results)
             {
-                testDuration = elapsedTime;
-                music.Stop();
+                musicClock.StopPlayback();
+                testDuration = musicClock.ElapsedTime;
+
                 results = true;
                 GameFinished?.Invoke();
             }
@@ -166,18 +170,19 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
 
     public void StartTest()
     {
-        music.Stop();
+        if (!musicClock.StartPlayback())
+        {
+            return;
+        }
 
         currentGoalIndex = 0;
         successfulHits = 0;
         lastResult = "Pending";
+
         testDuration = 0;
         results = false;
 
         spaceship.RestoreLife();
-
-        startMusic = AudioSettings.dspTime + 1.0;
-        music.PlayScheduled(startMusic);
 
         startSolicited = true;
 
@@ -221,7 +226,7 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
 
         if (spaceship.IsDestroyed)
         {
-            music.Stop();
+            musicClock.StopPlayback();
         }
 
         ActionSolved?.Invoke(isHit);
