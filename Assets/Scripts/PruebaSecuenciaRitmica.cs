@@ -8,7 +8,8 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
     [SerializeField] private MusicClock musicClock;
     [SerializeField] private TMP_Text textState;
     [SerializeField] private VidaNave spaceship;
-
+    [SerializeField] private PlayerInputReader inputReader;
+     
     [SerializeField] private double[] goalsTime = { 3.0, 7.0, 12.0, 16.0};
 
     [SerializeField] private double tolerance = 0.15;
@@ -68,6 +69,22 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
     public bool IsDestroyed => spaceship.IsDestroyed;
     public double Duration => testDuration;
 
+    private void OnEnable()
+    {
+        if(inputReader != null)
+        {
+            inputReader.ActionRequested += OnActionRequested;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (inputReader != null)
+        {
+            inputReader.ActionRequested -= OnActionRequested;
+        }
+    }
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -117,15 +134,14 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Keyboard keyboard = Keyboard.current;
-        if (keyboard == null)
+        if (!startSolicited)
         {
-            Debug.LogError("No keyboard detected. Please ensure a keyboard is connected.", this);
             return;
         }
 
-        if (!startSolicited)
+        if (results)
         {
+            ShowState(testDuration);
             return;
         }
 
@@ -137,34 +153,36 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
             return;
         }
 
-        if (!spaceship.IsDestroyed && currentGoalIndex < goalsTime.Length)
+        while (!spaceship.IsDestroyed && currentGoalIndex < goalsTime.Length
+                && elapsedTime > goalsTime[currentGoalIndex] + tolerance + 1.0
+        )
         {
-            if (keyboard != null && keyboard.fKey.wasPressedThisFrame)
-            {
-                EvaluatePulse(elapsedTime);
-            }
-
-            while (!spaceship.IsDestroyed && currentGoalIndex < goalsTime.Length
-                && elapsedTime > goalsTime[currentGoalIndex] + tolerance + 1.0)
-            {
-                SolveTest(false, "Missed");
-            }
+            SolveTest(false, "Missed");
         }
-        if (IsTestCompleted)
+
+
+        FinishTestIfNeeded();
+
+        if (results)
         {
-            if (!results)
-            {
-                musicClock.StopPlayback();
-                testDuration = musicClock.ElapsedTime;
-
-                results = true;
-                GameFinished?.Invoke();
-            }
-
             ShowState(testDuration);
+        }
+        else
+        {
+            ShowState(elapsedTime);
+        }
+
+    }
+
+    private void OnActionRequested()
+    {
+        if (!ActionPending || results)
+        {
             return;
         }
-        ShowState(elapsedTime);
+
+        EvaluatePulse(musicClock.ElapsedTime);
+        FinishTestIfNeeded();
 
     }
 
@@ -230,6 +248,21 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
         }
 
         ActionSolved?.Invoke(isHit);
+    }
+
+    private void FinishTestIfNeeded()
+    {
+        if (!IsTestCompleted || results)
+        {
+            return;
+        }
+
+        musicClock.StopPlayback();
+        testDuration = musicClock.ElapsedTime;
+
+        results = true;
+
+        GameFinished?.Invoke();
     }
 
     private void ShowState(double elapsedTime)

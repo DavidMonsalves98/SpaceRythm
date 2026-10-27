@@ -559,9 +559,8 @@ GameObject:
   m_Component:
   - component: {fileID: 242286435}
   - component: {fileID: 242286434}
-  - component: {fileID: 242286436}
-  - component: {fileID: 242286437}
   - component: {fileID: 242286438}
+  - component: {fileID: 242286439}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -681,40 +680,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &242286436
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 242286433}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09eecc0698a74764999c49b9838f66ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PruebaTiempoMusical
-  music: {fileID: 242286434}
-  timeText: {fileID: 235720047}
-  bpm: 100
-  firstBeatOffset: 0
---- !u!114 &242286437
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 242286433}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 298b813aa6e7b5741b3d3755491b7295, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PruebaEvaluacionRitmica
-  music: {fileID: 242286434}
-  textState: {fileID: 235720047}
-  spaceship: {fileID: 1868016492}
-  objectiveTime: 3
-  tolerance: 0.15
-  damage: 35
 --- !u!114 &242286438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -727,9 +692,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd67a38f574006043b46579e8e648b36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PruebaSecuenciaRitmica
-  music: {fileID: 242286434}
+  musicClock: {fileID: 242286439}
   textState: {fileID: 235720047}
   spaceship: {fileID: 1868016492}
+  inputReader: {fileID: 2101265132}
   goalsTime:
   - 3
   - 7
@@ -737,6 +703,19 @@ MonoBehaviour:
   - 16
   tolerance: 0.15
   damage: 35
+--- !u!114 &242286439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242286433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0beb8a9cb1a3fc4984594f31a93bdaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MusicClock
+  music: {fileID: 242286434}
 --- !u!1 &297214258
 GameObject:
   m_ObjectHideFlags: 0
@@ -958,7 +937,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &363668624
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3183,7 +3162,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1352282268
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3983,7 +3962,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VisualSpaceship
   spaceship: {fileID: 1868016492}
   visual_ss: {fileID: 786785130}
---- !u!1 &2061452849
+--- !u!1 &2101265131
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3991,60 +3970,42 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2061452850}
-  - component: {fileID: 2061452851}
-  - component: {fileID: 2061452852}
+  - component: {fileID: 2101265133}
+  - component: {fileID: 2101265132}
   m_Layer: 0
-  m_Name: EntryControl
+  m_Name: PlayerInput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2061452850
+--- !u!114 &2101265132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101265131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16e15b00de3826d44923d6e4613be0a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInputReader
+--- !u!4 &2101265133
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2061452849}
+  m_GameObject: {fileID: 2101265131}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -6.17329, y: 0.8245, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2061452851
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2061452849}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe489ba96ecfbfd488b4171d831b4a1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PruebaEntrada
-  ActionText: {fileID: 235720047}
---- !u!114 &2061452852
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2061452849}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1ec9178854615847979f9e9bb95751d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PruebaVidaNave
-  spaceship: {fileID: 1868016492}
-  stateText: {fileID: 235720047}
-  damagePerHit: 20
-  lifebar: {fileID: 1325837318}
 --- !u!1 &2122430785
 GameObject:
   m_ObjectHideFlags: 0
@@ -4190,7 +4151,6 @@ SceneRoots:
   - {fileID: 619394802}
   - {fileID: 1636412990}
   - {fileID: 1538085551}
-  - {fileID: 2061452850}
   - {fileID: 1868016491}
   - {fileID: 242286435}
   - {fileID: 1046247405}
@@ -4198,3 +4158,4 @@ SceneRoots:
   - {fileID: 347149753}
   - {fileID: 901709639}
   - {fileID: 51079021}
+  - {fileID: 2101265133}
