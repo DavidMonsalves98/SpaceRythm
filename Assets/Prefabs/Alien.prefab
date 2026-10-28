@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2985432403988873596}
   - component: {fileID: 7304517221278603315}
-  - component: {fileID: -3275916305021010130}
+  - component: {fileID: 7929090259197272280}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: Alien
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -93,7 +93,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
---- !u!114 &-3275916305021010130
+--- !u!114 &7929090259197272280
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

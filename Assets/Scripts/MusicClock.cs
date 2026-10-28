@@ -4,6 +4,18 @@ public class MusicClock : MonoBehaviour
 {
     [SerializeField] private AudioSource music;
 
+    [SerializeField] private double bpm = 160;
+
+    [SerializeField] private double firtsBeatOffset = 0.0;
+
+    public double Bps
+    {
+        get
+        {
+            return 60 / bpm;
+        }
+    }
+
     private double scheduledStart;
     private double stoppedTime = 0;
 
@@ -36,6 +48,13 @@ public class MusicClock : MonoBehaviour
             }
 
             return AudioSettings.dspTime - scheduledStart;
+        }
+    }
+
+    public double BeatPosition{
+        get
+        {
+            return (ElapsedTime - firtsBeatOffset) / Bps;
         }
     }
 

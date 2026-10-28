@@ -7,6 +7,7 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
 
     [SerializeField] private MusicClock musicClock;
     [SerializeField] private TMP_Text textState;
+    [SerializeField] private TMP_Text textBeatPosition;
     [SerializeField] private VidaNave spaceship;
     [SerializeField] private PlayerInputReader inputReader;
      
@@ -89,7 +90,7 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (musicClock == null || textState == null || spaceship == null)
+        if (musicClock == null || textState == null || spaceship == null || textBeatPosition == null)
         {
             Debug.LogError("One or more required components are missing.", this);
             enabled = false;
@@ -146,6 +147,8 @@ public class PruebaSecuenciaRitmica : MonoBehaviour
         }
 
         double elapsedTime = musicClock.ElapsedTime;
+
+        textBeatPosition.text = $"BP: {musicClock.BeatPosition:F2}";
 
         if (elapsedTime < 0)
         {

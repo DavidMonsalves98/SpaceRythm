@@ -3,6 +3,8 @@ using UnityEngine;
 public class RhytmicEnemy : MonoBehaviour
 {
     private PruebaSecuenciaRitmica evaluator;
+    
+    [SerializeField]    
 
     private Vector3 initialPos;
     private Vector3 finalPos;
@@ -11,6 +13,11 @@ public class RhytmicEnemy : MonoBehaviour
     private double movDuration;
 
     private bool configured = false;
+
+    private void Awake()
+    {
+        SFXClock.Instance.StartPlaySFX();
+    }
 
     public void Configure(PruebaSecuenciaRitmica evaluator, double goalTime,double leadTime,
             Vector3 finalPos)
@@ -23,7 +30,7 @@ public class RhytmicEnemy : MonoBehaviour
         movDuration = leadTime;
         configured = true;
         Debug.Log($"initial pos: {this.initialPos}, final pos:{this.finalPos}");
-        UpdatePosition();
+        //UpdatePosition();
 
     }
 
@@ -34,15 +41,15 @@ public class RhytmicEnemy : MonoBehaviour
         {
             return;
         }
-        UpdatePosition();
+        //UpdatePosition();
     }
 
-    private void UpdatePosition()
-    {
-        double startRoute = goalTime - movDuration;
-        double progress = (evaluator.ElapsedTime - startRoute) / movDuration;
+    //private void UpdatePosition()
+    //{
+    //    double startRoute = goalTime - movDuration;
+    //    double progress = (evaluator.ElapsedTime - startRoute) / movDuration;
 
-        transform.position = Vector3.Lerp(initialPos, finalPos, (float)progress);
+    //    transform.position = Vector3.Lerp(initialPos, finalPos, (float)progress);
 
-    }
+    //}
 }
